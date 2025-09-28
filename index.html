@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Harvest Farms — Landing</title>
+	<title>TenTwenty — Landing</title>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,8 +20,20 @@
 		.progress-bar { height: 2px; background: #ffffff; transition: width 600ms ease; }
 		@media (min-width: 1280px) { .container-max { max-width: 1200px; } }
 		/* crossfade images */
-		.hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 800ms ease; }
-		.hero-img.is-active { opacity:1; }
+		.hero-img {
+			position: absolute;
+			top: 0; left: 0;
+			width: 100%; height: 100%;
+			object-fit: cover;
+			opacity: 0;
+			transform: scale(1.1);  /* zoomed in */
+			transition: opacity 1s ease, transform 1s ease;
+			}
+
+			.hero-img.is-active {
+			opacity: 1;
+			transform: scale(1);
+			}
 		/* heading animation */
 		.fade-up { opacity:0; transform: translateY(10px); transition: opacity 600ms ease, transform 600ms ease; }
 		.fade-up.is-in { opacity:1; transform: translateY(0); }
