@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Harvest Farms — Landing</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+	<style>
+		:root { --header-pad: 14px; }
+		body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; }
+		/** pixel-tweak helpers **/
+		.header-shadow { box-shadow: 0 2px 0 rgba(0,0,0,0.04) inset; }
+		.text-shadow-soft { text-shadow: 0 1px 2px rgba(0,0,0,0.25); }
+		.hero-overlay { background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.15) 18%, rgba(0,0,0,0.10) 40%, rgba(0,0,0,0.05) 65%, rgba(0,0,0,0.25) 100%); }
+		.progress-track { height: 2px; background: rgba(255,255,255,0.45); }
+		.progress-bar { height: 2px; background: #ffffff; transition: width 600ms ease; }
+		@media (min-width: 1280px) { .container-max { max-width: 1200px; } }
+		/* crossfade images */
+		.hero-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 800ms ease; }
+		.hero-img.is-active { opacity:1; }
+		/* heading animation */
+		.fade-up { opacity:0; transform: translateY(10px); transition: opacity 600ms ease, transform 600ms ease; }
+		.fade-up.is-in { opacity:1; transform: translateY(0); }
+		/* thumbnail progress */
+		.thumb-progress rect { fill: none; stroke: rgba(255,255,255,0.95); stroke-width: 2; stroke-linejoin: miter; stroke-linecap: square; }
+		.thumb-progress .meter { stroke-dasharray: var(--perimeter, 300); stroke-dashoffset: var(--offset, 300); transition: stroke-dashoffset linear; }
+		/* quality section */
+		.reveal { opacity:0; transform: translateY(12px); transition: opacity 600ms ease, transform 600ms ease; }
+		.reveal.is-in { opacity:1; transform: translateY(0); }
+		.q-card { width: 18rem; height: 12rem; }
+		@media (min-width: 640px) { .q-card { width: 22rem; height: 14rem; } }
+		@media (min-width: 768px) { .q-card { width: 24rem; height: 16rem; } }
+		.q-side { width: 15rem; height: 10rem; opacity: 0.9; }
+		@media (min-width: 768px) { .q-side { width: 18rem; height: 12rem; } }
+		.q-dragging { cursor: grabbing; }
+	</style>
+</head>
+<body class="antialiased bg-black">
+	<!-- Header -->
+	<header class="fixed top-0 left-0 w-full z-30">
+		<div class="px-4 sm:px-6 lg:px-8">
+			<div class="container-max mx-auto mt-4">
+				<div class="flex items-center justify-between bg-white bg-opacity-95 rounded-lg border border-gray-200 header-shadow" style="padding: var(--header-pad)">
+					<!-- Mobile toggle -->
+					<button id="mobileToggle" class="md:hidden inline-flex items-center justify-center p-2 rounded border border-gray-200 text-gray-700 hover:bg-gray-50" aria-controls="mobileMenu" aria-expanded="false" aria-label="Open menu">
+						<svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<line x1="3" y1="6" x2="21" y2="6"></line>
+							<line x1="3" y1="12" x2="21" y2="12"></line>
+							<line x1="3" y1="18" x2="21" y2="18"></line>
+						</svg>
+					</button>
+
+					<nav aria-label="Primary" class="hidden md:block text-xs sm:text-sm font-medium tracking-normal text-gray-700">
+						<ul class="flex items-center space-x-4 sm:space-x-5 md:space-x-6">
+							<li><a href="#about" class="hover:text-gray-900">About</a></li>
+							<li><a href="#news" class="hover:text-gray-900">News</a></li>
+							<li><a href="#services" class="hover:text-gray-900">Services</a></li>
+							<li><a href="#team" class="hover:text-gray-900">Our Team</a></li>
+							<li><a href="#enquiry" class="hover:text-gray-900">Make Enquiry</a></li>
+						</ul>
+					</nav>
+					<a href="#contact" class="ml-3 sm:ml-6 whitespace-nowrap inline-flex items-center justify-center px-3 sm:px-4 py-2 rounded-md border border-gray-300 text-gray-800 hover:bg-gray-50 transition">
+						<span class="mr-2">Contact us</span>
+						<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M5 12h14"></path>
+							<path d="M13 5l7 7-7 7"></path>
+						</svg>
+					</a>
+				</div>
+				<!-- Mobile dropdown -->
+				<div id="mobileMenu" class="md:hidden hidden mt-2 bg-white bg-opacity-95 rounded-lg border border-gray-200 header-shadow">
+					<ul class="py-2 text-sm font-medium text-gray-700">
+						<li><a href="#about" class="block px-4 py-2 hover:bg-gray-50">About</a></li>
+						<li><a href="#news" class="block px-4 py-2 hover:bg-gray-50">News</a></li>
+						<li><a href="#services" class="block px-4 py-2 hover:bg-gray-50">Services</a></li>
+						<li><a href="#team" class="block px-4 py-2 hover:bg-gray-50">Our Team</a></li>
+						<li><a href="#enquiry" class="block px-4 py-2 hover:bg-gray-50">Make Enquiry</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<!-- Hero -->
+	<main class="relative min-h-screen w-full overflow-hidden">
+		<!-- Background crossfade -->
+		<div class="absolute inset-0">
+			<img id="heroA" class="hero-img is-active" alt="Hero image A">
+			<img id="heroB" class="hero-img" alt="Hero image B">
+		</div>
+		<div class="absolute inset-0 hero-overlay"></div>
+
+		<!-- Content -->
+		<section class="relative z-10 px-6 sm:px-10 lg:px-16 xl:px-24 2xl:px-32 pt-28 sm:pt-40 md:pt-44 lg:pt-48 pb-24 md:pb-28 text-white">
+			<p class="text-center sm:text-left text-xs sm:text-sm font-medium opacity-90 mb-3 sm:mb-4 fade-up" id="kicker">Welcome To Harvest Farms</p>
+			<h1 id="headline" class="text-center sm:text-left text-3xl sm:text-5xl md:text-6xl xl:text-7xl font-semibold leading-tight max-w-2xl mx-auto sm:mx-0 text-shadow-soft pr-6 md:pr-0 fade-up is-in">
+				From Our Farms<br class="hidden sm:block"/>To Your Hands
+			</h1>
+
+			<!--Bottom cluster-->
+			<div class="absolute inset-x-0 bottom-0 flex justify-center items-end space-x-4 sm:space-x-6 sm:inset-x-auto sm:left-10 lg:left-16 xl:left-24 sm:bottom-1 md:bottom-1">
+				<button id="nextThumb" class="relative group focus:outline-none focus:ring-2 focus:ring-white/70 rounded-md">
+					<div class="relative w-24 h-16 sm:w-32 sm:h-20 md:w-36 md:h-24 rounded-md overflow-hidden ring-2 ring-white ring-opacity-80 shadow-lg bg-gray-200">
+						<img id="thumbImg" alt="Next slide preview" class="w-full h-full object-cover"/>
+						<!-- Corner marker square -->
+						<div class="absolute -top-2 -left-2 w-6 h-6 border-2 border-white"></div>
+						<!-- SVG progress border -->
+						<svg class="thumb-progress absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 66" preserveAspectRatio="none">
+							<rect class="track" x="2" y="2" width="96" height="62" rx="4" ry="4" opacity="0.35"></rect>
+							<rect id="thumbMeter" class="meter" x="2" y="2" width="96" height="62" rx="4" ry="4"></rect>
+						</svg>
+						<!-- Next label -->
+						<span class="absolute inset-0 grid place-items-center text-[11px] sm:text-xs font-semibold tracking-wide uppercase bg-black bg-opacity-0 group-hover:bg-opacity-20 transition">
+							Next
+						</span>
+					</div>
+				</button>
+
+				<!-- Pager / progress -->
+				<div class="pb-1">
+					<div class="flex items-center space-x-3 mb-2 text-sm sm:text-base">
+						<span id="currentSlide" class="tabular-nums">01</span>
+						<span class="opacity-80">—</span>
+						<span class="opacity-80 tabular-nums">04</span>
+					</div>
+					<div class="w-36 sm:w-56 md:w-72 progress-track">
+						<div id="progressBar" class="progress-bar w-1/12"></div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<!-- Quality Products Section -->
+	<section id="quality" class="bg-white text-gray-900">
+		<div class="max-w-5xl mx-auto px-6 sm:px-8 md:px-10 py-16 sm:py-20 md:py-24">
+			<h2 id="qTitle" class="text-center text-2xl sm:text-3xl font-semibold mb-4 reveal">Quality Products</h2>
+			<p id="qPara" class="max-w-2xl mx-auto text-center text-gray-600 text-sm sm:text-base leading-relaxed mb-10 sm:mb-12 reveal">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+			<div class="relative flex items-center justify-center">
+				<!-- Left tilted preview -->
+				<div class="hidden sm:block transform -rotate-12 mr-2 sm:mr-6 opacity-80">
+					<img id="qPrevImg" class="q-side rounded-md shadow-md object-cover" alt="Previous sample">
+				</div>
+
+				<!-- Center draggable card -->
+				<div id="qCenter" class="q-card relative rounded-md shadow-lg overflow-hidden bg-gray-200 select-none cursor-grab">
+					<img id="qCenterImg" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300" alt="Current sample">
+					<div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+						<div class="text-xs bg-white/80 text-gray-700 px-3 py-1 rounded-full shadow">Drag</div>
+					</div>
+				</div>
+
+				<!-- Right tilted preview -->
+				<div class="hidden sm:block transform rotate-12 ml-2 sm:ml-6 opacity-80">
+					<img id="qNextImg" class="q-side rounded-md shadow-md object-cover" alt="Next sample">
+				</div>
+			</div>
+
+			<!-- Caption -->
+			<div class="text-center mt-6">
+				<div id="qClient" class="font-medium">Client 1</div>
+				<div id="qLocation" class="text-xs text-gray-500 mt-1">Dubai, United Arab Emirates</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="./script.js"></script>
+</body>
+</html>
